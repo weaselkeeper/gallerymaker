@@ -32,6 +32,21 @@ def create_html(videofile):
 
 def create_index(videolist):
     """ create the index.html, pointing at all the individual ones"""
+    template_header = """<!doctype html>
+    <html>
+      <head>
+          <title>Movietime!</title>
+              <meta charset="utf-8">
+                </head>
+                  <body>
+                  """
+    template_footer = """
+</body>
+</html>
+"""
+    for video in videolist:
+        print video.split('.')[0]
+
 
 if "__main__" in __name__:
     args = get_options()
@@ -40,5 +55,5 @@ if "__main__" in __name__:
     else:
         moviedir = './'
     vids = get_videolist(moviedir)
-    print vids
+    create_index(vids)
 
