@@ -26,27 +26,57 @@ def get_videolist(moviedir):
     return videolisting
 
 
-def create_html(videofile):
+def create_html(videofile,moviedir):
     """ make do the html for video thingy"""
+    header = """
+<!doctype html>
+<html>
+        <head>
+            <title>Movietime!</title>
+                <meta charset="utf-8">
+        </head>
+    <body>
+<video controls>
+    "<source src="/
+"""
 
-
-def create_index(videolist):
-    """ create the index.html, pointing at all the individual ones"""
-    template_header = """<!doctype html>
-    <html>
-      <head>
-          <title>Movietime!</title>
-              <meta charset="utf-8">
-                </head>
-                  <body>
-                  """
-    template_footer = """
-</body>
+    footer = """
+"/></video>
+    </body>
 </html>
 """
-    for video in videolist:
-        print video.split('.')[0]
+    page = moviedir + "/page/" + videofile.split('.')[0] + ".html"
+    movie_page = open(page, 'w')
+    movie_page.write(header)
+    movie_page.write(videofile)
+    movie_page.write(footer)
+    movie_page.close()
 
+
+def create_index(videolist,moviedir):
+    """ create the index.html, pointing at all the individual ones"""
+    template_header = """
+<!doctype html>
+<html>
+        <head>
+            <title>Movietime!</title>
+                <meta charset="utf-8">
+        </head>
+    <body>
+                """
+    template_footer = """
+    </body>
+</html>
+"""
+    indexfile = moviedir  +'/index.html'
+    index = open(indexfile,'w')
+    index.write(template_header)
+    for video in videolist:
+        tag = '<a href="page/' + video.split('.')[0] + '.html">' + video + '</a></br>'
+        index.write(tag)
+        create_html(video,moviedir)
+    index.write(template_footer)
+    index.close()
 
 if "__main__" in __name__:
     args = get_options()
@@ -55,5 +85,5 @@ if "__main__" in __name__:
     else:
         moviedir = './'
     vids = get_videolist(moviedir)
-    create_index(vids)
+    create_index(vids,moviedir)
 
