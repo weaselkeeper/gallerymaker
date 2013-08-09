@@ -45,7 +45,14 @@ def create_html(videofile,moviedir):
     </body>
 </html>
 """
+
+    # Create the subdir for the movie html pages if it doesn't exist
+    # Then write the file to that subdir
+
     page = moviedir + "/page/" + videofile.split('.')[0] + ".html"
+    subdir = os.path.dirname(page)
+    if not os.path.exists(subdir):
+        os.mkdir(subdir)
     movie_page = open(page, 'w')
     movie_page.write(header)
     movie_page.write(videofile)
