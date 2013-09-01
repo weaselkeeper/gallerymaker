@@ -43,8 +43,7 @@ def create_html(videofile,moviedir,sep):
         </head>
     <body>
 <video controls>
-    "<source src="/
-"""
+    "<source src="/"""
 
     footer = """
 "/></video>
