@@ -81,7 +81,7 @@ def create_index(videolist,moviedir,sep):
     </body>
 </html>
 """
-    indexfile = moviedir  +'/index.html'
+    indexfile = os.path.join(moviedir,'index.html')
     index = open(indexfile,'w')
     index.write(template_header)
     for video in videolist:
