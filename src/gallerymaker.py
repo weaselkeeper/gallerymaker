@@ -99,8 +99,9 @@ if "__main__" in __name__:
         moviedir = './'
     vids = get_videolist(moviedir)
     create_index(vids,moviedir,'/page/')
-    for dir in gallery_subdir(moviedir):
-        dir = os.path.join(moviedir,dir)
-        print dir
-        vids = get_videolist(dir)
-        create_index(vids,dir,'/')
+    if args.recurse:
+        for dir in gallery_subdir(moviedir):
+            dir = os.path.join(moviedir,dir)
+            print dir
+            vids = get_videolist(dir)
+            create_index(vids,dir,'/')
