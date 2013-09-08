@@ -16,7 +16,8 @@ def gallery_subdir(dir):
 def get_options():
     """ command-line options """
     parser = argparse.ArgumentParser(description='Pass cli options')
-    parser.add_argument('-d', '--dir', action = "store", dest = 'dir' )
+    parser.add_argument('-d', '--dir', action = "store")
+    parser.add_argument('-r', '--recurse', action = "store")
     args = parser.parse_args()
     args.usage = 'gallerymaker [options]'
     return args
