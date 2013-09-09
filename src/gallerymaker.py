@@ -10,8 +10,16 @@ import argparse
 def gallery_subdir(dir):
     """ If there are subdirs, check for m4v files, if so, recurse into them,
     and build gallery """
-    return [name for name in os.listdir(dir)
-        if os.path.isdir(os.path.join(dir,name))]
+    vids = os.listdir(dir)
+    hasvids = 0
+    for _file in vids:
+        if _file.endswith('.m4v'):
+            hasvids = 1
+    if hasvids:
+        return [name for name in os.listdir(dir)
+            if os.path.isdir(os.path.join(dir,name))]
+    else:
+        return []
 
 def get_options():
     """ command-line options """
@@ -53,7 +61,8 @@ def create_html(videofile,moviedir,sep):
 """
 
     # Create the subdir for the movie html pages if it doesn't exist
-    # Then write the file to that subdir
+    # Then write the file to that subdir.  We put the html files in a subdir
+    # to avoid clotting up the movie dir. 
 
     page = moviedir + sep + videofile.split('.')[0] + ".html"
     subdir = os.path.dirname(page)
@@ -84,6 +93,10 @@ def create_index(videolist,moviedir,sep):
     indexfile = os.path.join(moviedir,'index.html')
     index = open(indexfile,'w')
     index.write(template_header)
+    if args.recurse:
+        for dir in gallery_subdir(moviedir):
+            tag = '<a href=' + dir + '/index.html>' + dir + '</a></br>'
+            index.write(tag)
     for video in videolist:
         tag = '<a href="page/' + video.split('.')[0] + '.html">' + video + '</a></br>'
         index.write(tag)
@@ -100,8 +113,9 @@ if "__main__" in __name__:
     vids = get_videolist(moviedir)
     create_index(vids,moviedir,'/page/')
     if args.recurse:
+        # find any subdirs that contain movie files
         for dir in gallery_subdir(moviedir):
-            dir = os.path.join(moviedir,dir)
             print dir
+            dir = os.path.join(moviedir,dir)
             vids = get_videolist(dir)
             create_index(vids,dir,'/')
