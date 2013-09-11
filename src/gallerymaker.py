@@ -8,11 +8,12 @@ import sys
 import argparse
 
 def gallery_subdir(dir):
-    """ If there are subdirs, check for m4v files, if so, recurse into them,
-    and build gallery """
+    """ If there are subdirs, check for m4v files, if so, return list of them
+    to build gallery with """
     vids = os.listdir(dir)
     hasvids = 0
     for _file in vids:
+        # This isn't very efficient at all.  Should stop if one file is correct.
         if _file.endswith('.m4v'):
             hasvids = 1
     if hasvids:
@@ -41,7 +42,7 @@ def get_videolist(moviedir):
     return videolisting
 
 
-def create_movie_html(videofile,moviedir,sep):
+def create_movie_html(videofile,moviedir,sep,docroot_subdir):
     """ make do the html for video thingy"""
     header = """
 <!doctype html>
@@ -64,18 +65,21 @@ def create_movie_html(videofile,moviedir,sep):
     # Then write the file to that subdir.  We put the html files in a subdir
     # to avoid clotting up the movie dir. 
 
-    page = moviedir + sep + videofile.split('.')[0] + ".html"
-    subdir = os.path.dirname(page)
+    movie_index_page = moviedir + sep + videofile.split('.')[0] + ".html"
+    subdir = os.path.dirname(movie_index_page)
+    print movie_index_page,videofile, subdir
     if not os.path.exists(subdir):
         os.mkdir(subdir)
-    movie_page = open(page, 'w')
+    movie_page = open(movie_index_page, 'w')
     movie_page.write(header)
-    movie_page.write(videofile)
+    moviefile_loc = os.path.join(docroot_subdir, videofile)
+    movie_page.write(moviefile_loc)
+    print moviefile_loc
     movie_page.write(footer)
     movie_page.close()
 
 
-def create_index(videolist,moviedir,sep):
+def create_index(videolist,moviedir,sep,docroot_subdir='/'):
     """ create the index.html, pointing at all the individual ones"""
     template_header = """
 <!doctype html>
@@ -100,7 +104,7 @@ def create_index(videolist,moviedir,sep):
     for video in videolist:
         tag = '<a href="page/' + video.split('.')[0] + '.html">' + video + '</a></br>'
         index.write(tag)
-        create_movie_html(video,moviedir,sep)
+        create_movie_html(video,moviedir,sep,docroot_subdir)
     index.write(template_footer)
     index.close()
 
@@ -111,11 +115,12 @@ if "__main__" in __name__:
     else:
         moviedir = './'
     vids = get_videolist(moviedir)
+    # we assume moviedir is docroot.
     create_index(vids,moviedir,'/page/')
     if args.recurse:
         # find any subdirs that contain movie files
         for dir in gallery_subdir(moviedir):
-            print dir
-            dir = os.path.join(moviedir,dir)
-            vids = get_videolist(dir)
-            create_index(vids,dir,'/')
+            filedir = os.path.join(moviedir,dir)
+            subdir = os.path.join(moviedir,dir)
+            vids = get_videolist(subdir)
+            create_index(vids,filedir,'/page/',dir)
