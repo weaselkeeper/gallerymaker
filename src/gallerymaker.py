@@ -41,7 +41,7 @@ def get_videolist(moviedir):
     return videolisting
 
 
-def create_html(videofile,moviedir,sep):
+def create_movie_html(videofile,moviedir,sep):
     """ make do the html for video thingy"""
     header = """
 <!doctype html>
@@ -100,7 +100,7 @@ def create_index(videolist,moviedir,sep):
     for video in videolist:
         tag = '<a href="page/' + video.split('.')[0] + '.html">' + video + '</a></br>'
         index.write(tag)
-        create_html(video,moviedir,sep)
+        create_movie_html(video,moviedir,sep)
     index.write(template_footer)
     index.close()
 
