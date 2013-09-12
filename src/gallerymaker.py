@@ -1,11 +1,31 @@
 #!/usr/bin/env python
 
+"""
+
+License: GPL V2 See LICENSE file
+Author: Jim Richardson
+email: weaselkeeper@gmail.com
+
+"""
+PROJECTNAME='gallerymaker'
+
 """ Create a series of html files that will allow chrome to play all the m4v
 files in this directory """
 
 import os
 import sys
 import argparse
+from ConfigParser import SafeConfigParser
+import logging
+
+logging.basicConfig(level=logging.WARN,
+                    format='%(asctime)s %(levelname)s - %(message)s',
+                    datefmt='%y.%m.%d %H:%M:%S')
+
+console = logging.StreamHandler(sys.stderr)
+console.setLevel(logging.WARN)
+logging.getLogger(PROJECTNAME).addHandler(console)
+log = logging.getLogger(PROJECTNAME)
 
 def gallery_subdir(dir):
     """ If there are subdirs, check for m4v files, if so, return list of them
@@ -27,6 +47,7 @@ def get_options():
     parser = argparse.ArgumentParser(description='Pass cli options')
     parser.add_argument('-d', '--dir', action = "store")
     parser.add_argument('-r', '--recurse', action = "store_true")
+    parser.add_argument('-D', '--debug', action = 'store_true')
     args = parser.parse_args()
     args.usage = 'gallerymaker [options]'
     return args
@@ -63,18 +84,19 @@ def create_movie_html(videofile,moviedir,sep,docroot_subdir):
 
     # Create the subdir for the movie html pages if it doesn't exist
     # Then write the file to that subdir.  We put the html files in a subdir
-    # to avoid clotting up the movie dir. 
+    # to avoid clotting up the movie dir.
 
     movie_index_page = moviedir + sep + videofile.split('.')[0] + ".html"
     subdir = os.path.dirname(movie_index_page)
-    print movie_index_page,videofile, subdir
+    log.debug('tracking some moves %s %s %s' % (movie_index_page, videofile,
+              subdir))
     if not os.path.exists(subdir):
         os.mkdir(subdir)
     movie_page = open(movie_index_page, 'w')
     movie_page.write(header)
     moviefile_loc = os.path.join(docroot_subdir, videofile)
     movie_page.write(moviefile_loc)
-    print moviefile_loc
+    log.debug( 'moviefile location relative to docroot  %s' % moviefile_loc)
     movie_page.write(footer)
     movie_page.close()
 
@@ -110,6 +132,8 @@ def create_index(videolist,moviedir,sep,docroot_subdir='/'):
 
 if "__main__" in __name__:
     args = get_options()
+    if args.debug:
+        log.setLevel(logging.DEBUG)
     if args.dir:
         moviedir = args.dir
     else:
