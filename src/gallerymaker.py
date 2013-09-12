@@ -134,6 +134,8 @@ if "__main__" in __name__:
     args = get_options()
     if args.debug:
         log.setLevel(logging.DEBUG)
+    else:
+        log.setLevel(logging.WARN)
     if args.dir:
         moviedir = args.dir
     else:
