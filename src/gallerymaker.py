@@ -17,15 +17,33 @@ import sys
 import argparse
 from ConfigParser import SafeConfigParser
 import logging
+try:
+    from pymongo import Connection
+except ImportError as e:
+    print 'Failed import of pymmongo, system says %s' % e
+    sys.exit(1)
 
-logging.basicConfig(level=logging.WARN,
-                    format='%(asctime)s %(levelname)s - %(message)s',
-                    datefmt='%y.%m.%d %H:%M:%S')
+def run():
+    """ Set up defaults, init stuff, the usual"""
+    log.debug('In run function'
+    )
 
-console = logging.StreamHandler(sys.stderr)
-console.setLevel(logging.WARN)
-logging.getLogger(PROJECTNAME).addHandler(console)
-log = logging.getLogger(PROJECTNAME)
+    logging.basicConfig(level=logging.WARN,
+                        format='%(asctime)s %(levelname)s - %(message)s',
+                        datefmt='%y.%m.%d %H:%M:%S')
+
+    console = logging.StreamHandler(sys.stderr)
+    console.setLevel(logging.WARN)
+    logging.getLogger(PROJECTNAME).addHandler(console)
+    log = logging.getLogger(PROJECTNAME)
+
+    #Default config location.
+    CONFIGFILE = os.path.join('/etc', PROJECTNAME,PROJECTNAME +'.conf')
+    if os.file.exists(CONFIGFILE):
+        config = CONFIGFILE
+    else:
+        config = "something else"
+    return config
 
 def gallery_subdir(dir):
     """ If there are subdirs, check for m4v files, if so, return list of them
@@ -45,6 +63,8 @@ def gallery_subdir(dir):
 def get_options():
     """ command-line options """
     parser = argparse.ArgumentParser(description='Pass cli options')
+    parser.add_argument('-c', '--config', action = "store",
+        help='Specify a path to an alternate config file')
     parser.add_argument('-d', '--dir', action = "store")
     parser.add_argument('-r', '--recurse', action = "store_true")
     parser.add_argument('-D', '--debug', action = 'store_true')
@@ -131,6 +151,8 @@ def create_index(videolist,moviedir,sep,docroot_subdir='/'):
     index.close()
 
 if "__main__" in __name__:
+    config = run() # Init stuff
+
     args = get_options()
     if args.debug:
         log.setLevel(logging.DEBUG)
