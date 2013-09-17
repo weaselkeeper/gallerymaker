@@ -23,23 +23,22 @@ except ImportError as e:
     print 'Failed import of pymmongo, system says %s' % e
     sys.exit(1)
 
+
+logging.basicConfig(level=logging.WARN,
+                    format='%(asctime)s %(levelname)s - %(message)s',
+                    datefmt='%y.%m.%d %H:%M:%S')
+
+console = logging.StreamHandler(sys.stderr)
+console.setLevel(logging.WARN)
+logging.getLogger(PROJECTNAME).addHandler(console)
+log = logging.getLogger(PROJECTNAME)
+
 def run():
     """ Set up defaults, init stuff, the usual"""
-    log.debug('In run function'
-    )
-
-    logging.basicConfig(level=logging.WARN,
-                        format='%(asctime)s %(levelname)s - %(message)s',
-                        datefmt='%y.%m.%d %H:%M:%S')
-
-    console = logging.StreamHandler(sys.stderr)
-    console.setLevel(logging.WARN)
-    logging.getLogger(PROJECTNAME).addHandler(console)
-    log = logging.getLogger(PROJECTNAME)
-
+    log.debug('In run function')
     #Default config location.
     CONFIGFILE = os.path.join('/etc', PROJECTNAME,PROJECTNAME +'.conf')
-    if os.file.exists(CONFIGFILE):
+    if os.path.isfile(CONFIGFILE):
         config = CONFIGFILE
     else:
         config = "something else"
