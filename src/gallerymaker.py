@@ -68,18 +68,6 @@ def gallery_subdir(dir):
     else:
         return []
 
-def get_options():
-    """ command-line options """
-    parser = argparse.ArgumentParser(description='Pass cli options')
-    parser.add_argument('-c', '--config', action = "store",
-        help='Specify a path to an alternate config file')
-    parser.add_argument('-d', '--dir', action = "store")
-    parser.add_argument('-r', '--recurse', action = "store_true")
-    parser.add_argument('-D', '--debug', action = 'store_true')
-    args = parser.parse_args()
-    args.usage = 'gallerymaker [options]'
-    return args
-
 
 def get_videolist(moviedir):
     """ Build a list of the video files """
@@ -159,7 +147,17 @@ def create_index(videolist,moviedir,sep,docroot_subdir='/'):
     index.close()
 
 if "__main__" in __name__:
-    args = get_options()
+
+    """ command-line options """
+    parser = argparse.ArgumentParser(description='Pass cli options')
+    parser.add_argument('-c', '--config', action = "store",
+        help='Specify a path to an alternate config file')
+    parser.add_argument('-d', '--dir', action = "store")
+    parser.add_argument('-r', '--recurse', action = "store_true")
+    parser.add_argument('-D', '--debug', action = 'store_true')
+    args = parser.parse_args()
+    args.usage = 'gallerymaker [options]'
+
     if args.debug:
         log.setLevel(logging.DEBUG)
     else:
