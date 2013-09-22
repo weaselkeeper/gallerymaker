@@ -34,15 +34,24 @@ logging.getLogger(PROJECTNAME).addHandler(console)
 log = logging.getLogger(PROJECTNAME)
 
 def run():
-    """ Set up defaults, init stuff, the usual"""
+    """ Set up defaults, init stuff, do the needful, the usual"""
     log.debug('In run function')
     #Default config location.
     CONFIGFILE = os.path.join('/etc', PROJECTNAME,PROJECTNAME +'.conf')
     if os.path.isfile(CONFIGFILE):
         config = CONFIGFILE
     else:
-        config = "something else"
-    return config
+        log.debug("config unknown, but currently we don't care, as we don't use it")
+    vids = get_videolist(moviedir)
+    # we assume moviedir is docroot.
+    create_index(vids,moviedir,'/page/')
+    if args.recurse:
+        # find any subdirs that contain movie files
+        for dir in gallery_subdir(moviedir):
+            filedir = os.path.join(moviedir,dir)
+            subdir = os.path.join(moviedir,dir)
+            vids = get_videolist(subdir)
+            create_index(vids,filedir,'/page/',dir)
 
 def gallery_subdir(dir):
     """ If there are subdirs, check for m4v files, if so, return list of them
@@ -150,8 +159,6 @@ def create_index(videolist,moviedir,sep,docroot_subdir='/'):
     index.close()
 
 if "__main__" in __name__:
-    config = run() # Init stuff
-
     args = get_options()
     if args.debug:
         log.setLevel(logging.DEBUG)
@@ -161,13 +168,8 @@ if "__main__" in __name__:
         moviedir = args.dir
     else:
         moviedir = './'
-    vids = get_videolist(moviedir)
-    # we assume moviedir is docroot.
-    create_index(vids,moviedir,'/page/')
-    if args.recurse:
-        # find any subdirs that contain movie files
-        for dir in gallery_subdir(moviedir):
-            filedir = os.path.join(moviedir,dir)
-            subdir = os.path.join(moviedir,dir)
-            vids = get_videolist(subdir)
-            create_index(vids,filedir,'/page/',dir)
+
+    """ And go """
+    log.debug('off to run()')
+    run()
+
