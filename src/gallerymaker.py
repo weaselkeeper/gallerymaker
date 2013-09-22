@@ -117,7 +117,7 @@ def create_movie_html(videofile,moviedir,sep,docroot_subdir):
     movie_page.close()
 
 
-def create_index(videolist,moviedir,sep,docroot_subdir='/'):
+def create_index(videolist,moviedir,sep,docroot_subdir=''):
     """ create the index.html, pointing at all the individual ones"""
     template_header = """
 <!doctype html>
