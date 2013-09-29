@@ -7,10 +7,10 @@ Author: Jim Richardson
 email: weaselkeeper@gmail.com
 
 """
-PROJECTNAME='gallerymaker'
+PROJECTNAME = 'gallerymaker'
 
-""" Create a series of html files that will allow chrome to play all the m4v
-files in this directory """
+# Create a series of html files that will allow chrome to play all the m4v
+# files in this directory
 
 import os
 import sys
@@ -37,49 +37,49 @@ def run():
     """ Set up defaults, init stuff, do the needful, the usual"""
     log.debug('In run function')
     #Default config location.
-    CONFIGFILE = os.path.join('/etc', PROJECTNAME,PROJECTNAME +'.conf')
+    CONFIGFILE = os.path.join('/etc', PROJECTNAME, PROJECTNAME +'.conf')
     if os.path.isfile(CONFIGFILE):
         config = CONFIGFILE
     else:
         log.debug("config unknown, but currently we don't care, as we don't use it")
     vids = get_videolist(moviedir)
     # we assume moviedir is docroot.
-    create_index(vids,moviedir,'/page/')
+    create_index(vids, moviedir, '/page/')
     if args.recurse:
         # find any subdirs that contain movie files
-        for dir in gallery_subdir(moviedir):
-            filedir = os.path.join(moviedir,dir)
-            subdir = os.path.join(moviedir,dir)
+        for _dir in gallery_subdir(moviedir):
+            filedir = os.path.join(moviedir, _dir)
+            subdir = os.path.join(moviedir, _dir)
             vids = get_videolist(subdir)
-            create_index(vids,filedir,'/page/',dir)
+            create_index(vids, filedir, '/page/', _dir)
 
-def gallery_subdir(dir):
+def gallery_subdir(_dir):
     """ If there are subdirs, check for m4v files, if so, return list of them
     to build gallery with """
-    vids = os.listdir(dir)
+    vids = os.listdir(_dir)
     hasvids = 0
     for _file in vids:
         # This isn't very efficient at all.  Should stop if one file is correct.
         if _file.endswith('.m4v'):
             hasvids = 1
     if hasvids:
-        return [name for name in os.listdir(dir)
-            if os.path.isdir(os.path.join(dir,name))]
+        return [name for name in os.listdir(_dir)
+            if os.path.isdir(os.path.join(_dir, name))]
     else:
         return []
 
 
-def get_videolist(moviedir):
+def get_videolist(_moviedir):
     """ Build a list of the video files """
     videolisting = []
-    vids = os.listdir(moviedir)
+    vids = os.listdir(_moviedir)
     for _file in vids:
         if _file.endswith('.m4v'):
             videolisting.append(_file)
     return videolisting
 
 
-def create_movie_html(videofile,moviedir,sep,docroot_subdir):
+def create_movie_html(videofile, _moviedir, sep, docroot_subdir):
     """ make do the html for video thingy"""
     header = """
 <!doctype html>
@@ -117,7 +117,7 @@ def create_movie_html(videofile,moviedir,sep,docroot_subdir):
     movie_page.close()
 
 
-def create_index(videolist,moviedir,sep,docroot_subdir=''):
+def create_index(videolist, _moviedir, sep, docroot_subdir=''):
     """ create the index.html, pointing at all the individual ones"""
     template_header = """
 <!doctype html>
@@ -132,17 +132,17 @@ def create_index(videolist,moviedir,sep,docroot_subdir=''):
     </body>
 </html>
 """
-    indexfile = os.path.join(moviedir,'index.html')
-    index = open(indexfile,'w')
+    indexfile = os.path.join(_moviedir, 'index.html')
+    index = open(indexfile, 'w')
     index.write(template_header)
     if args.recurse:
-        for dir in gallery_subdir(moviedir):
-            tag = '<a href=' + dir + '/index.html>' + dir + '</a></br>'
+        for _dir in gallery_subdir(_moviedir):
+            tag = '<a href=' + _dir + '/index.html>' + _dir + '</a></br>'
             index.write(tag)
     for video in videolist:
         tag = '<a href="page/' + video.split('.')[0] + '.html">' + video + '</a></br>'
         index.write(tag)
-        create_movie_html(video,moviedir,sep,docroot_subdir)
+        create_movie_html(video, _moviedir, sep, docroot_subdir)
     index.write(template_footer)
     index.close()
 
