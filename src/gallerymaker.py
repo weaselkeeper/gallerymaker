@@ -51,6 +51,8 @@ def run():
             filedir = os.path.join(moviedir, _dir)
             subdir = os.path.join(moviedir, _dir)
             vids = get_videolist(subdir)
+            log.debug(' in run(), dealing with variables %s %s %s ' %
+                    (filedir, subdir, vids))
             create_index(vids, filedir, '/page/', _dir)
 
 def gallery_subdir(_dir):
@@ -104,7 +106,7 @@ def create_movie_html(videofile, _moviedir, sep, docroot_subdir):
 
     movie_index_page = moviedir + sep + videofile.split('.')[0] + ".html"
     subdir = os.path.dirname(movie_index_page)
-    log.debug('tracking some moves %s %s %s' % (movie_index_page, videofile,
+    log.debug('tracking some movies %s %s %s' % (movie_index_page, videofile,
               subdir))
     if not os.path.exists(subdir):
         os.mkdir(subdir)
