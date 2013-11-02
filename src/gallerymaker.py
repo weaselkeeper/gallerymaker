@@ -111,11 +111,23 @@ def create_movie_html(videofile, _moviedir, sep, docroot_subdir):
     if not os.path.exists(subdir):
         os.mkdir(subdir)
     movie_page = open(movie_index_page, 'w')
-    movie_page.write(header)
+    if args.dryrun:
+        log.debug('writing header %s' % header)
+    else:
+        movie_page.write(header)
+
     moviefile_loc = os.path.join(docroot_subdir, videofile)
-    movie_page.write(moviefile_loc)
+    if args.dryrun:
+        log.debug('writing moviepage %s' % moviefile_loc)
+    else:
+        movie_page.write(moviefile_loc)
+
     log.debug( 'moviefile location relative to docroot  %s' % moviefile_loc)
-    movie_page.write(footer)
+
+    if args.dryrun:
+        log.debug('writing moviepage %s' % moviefile_loc)
+    else:
+        movie_page.write(footer)
     movie_page.close()
 
 
@@ -136,16 +148,28 @@ def create_index(videolist, _moviedir, sep, docroot_subdir=''):
 """
     indexfile = os.path.join(_moviedir, 'index.html')
     index = open(indexfile, 'w')
-    index.write(template_header)
+    if args.dryrun:
+        log.debug('writing header %s' % template_header)
+    else:
+        index.write(template_header)
     if args.recurse:
         for _dir in gallery_subdir(_moviedir):
             tag = '<a href=' + _dir + '/index.html>' + _dir + '</a></br>'
-            index.write(tag)
+            if args.dryrun:
+                log.debug('writing tag %s' % tag)
+            else:
+                index.write(tag)
     for video in videolist:
         tag = '<a href="page/' + video.split('.')[0] + '.html">' + video + '</a></br>'
-        index.write(tag)
+        if args.dryrun:
+            log.debug('writing tag %s' % tag)
+        else:
+            index.write(tag)
         create_movie_html(video, _moviedir, sep, docroot_subdir)
-    index.write(template_footer)
+    if args.dryrun:
+        log.debug('writing footer %s' % template_footer)
+    else:
+        index.write(template_footer)
     index.close()
 
 if "__main__" in __name__:
@@ -157,6 +181,7 @@ if "__main__" in __name__:
     parser.add_argument('-d', '--dir', action = "store")
     parser.add_argument('-r', '--recurse', action = "store_true")
     parser.add_argument('-D', '--debug', action = 'store_true')
+    parser.add_argument('-n', '--dryrun', action = 'store_true')
     args = parser.parse_args()
     args.usage = 'gallerymaker [options]'
 
