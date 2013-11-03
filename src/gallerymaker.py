@@ -19,8 +19,8 @@ from ConfigParser import SafeConfigParser
 import logging
 try:
     from pymongo import Connection
-except ImportError as e:
-    print 'Failed import of pymmongo, system says %s' % e
+except ImportError as error:
+    print 'Failed import of pymmongo, system says %s' % error
     sys.exit(1)
 
 
@@ -44,6 +44,8 @@ def run():
         log.debug("config unknown, but currently we don't care, as we don't use it")
     vids = get_videolist(moviedir)
     # we assume moviedir is docroot.
+    log.debug('Creating top level index with %s, %s ' %
+            (vids, moviedir))
     create_index(vids, moviedir, '/page/')
     if args.recurse:
         # find any subdirs that contain movie files
@@ -51,9 +53,9 @@ def run():
             filedir = os.path.join(moviedir, _dir)
             subdir = os.path.join(moviedir, _dir)
             vids = get_videolist(subdir)
-            log.debug(' in run(), dealing with variables %s %s %s ' %
-                    (filedir, subdir, vids))
-            create_index(vids, filedir, '/page/', _dir)
+            log.debug(' in run(), dealing with variables %s %s %s %s' %
+                    (filedir, subdir, vids, _dir))
+            create_index(vids, filedir, _dir)
 
 def gallery_subdir(_dir):
     """ If there are subdirs, check for m4v files, if so, return list of them
