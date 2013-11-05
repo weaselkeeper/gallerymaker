@@ -15,14 +15,7 @@ PROJECTNAME = 'gallerymaker'
 import os
 import sys
 import argparse
-from ConfigParser import SafeConfigParser
 import logging
-try:
-    from pymongo import Connection
-except ImportError as error:
-    print 'Failed import of pymmongo, system says %s' % error
-    sys.exit(1)
-
 
 logging.basicConfig(level=logging.WARN,
                     format='%(asctime)s %(levelname)s - %(message)s',
@@ -36,12 +29,6 @@ log = logging.getLogger(PROJECTNAME)
 def run():
     """ Set up defaults, init stuff, do the needful, the usual"""
     log.debug('In run function')
-    #Default config location.
-    CONFIGFILE = os.path.join('/etc', PROJECTNAME, PROJECTNAME +'.conf')
-    if os.path.isfile(CONFIGFILE):
-        config = CONFIGFILE
-    else:
-        log.debug("config unknown, but currently we don't care, as we don't use it")
     vids = get_videolist(moviedir)
     # we assume moviedir is docroot.
     log.debug('Creating top level index with %s, %s ' %
