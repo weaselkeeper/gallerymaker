@@ -6,7 +6,7 @@ Priority: optional
 Homepage: https://github.com/weaselkeeper/gallerymaker
 Standards-Version: 3.9.2
 
-Package: someproject
+Package: gallerymaker
 Version: VERSION
 Maintainer: Jim Richardson <weaselkeeper@gmail.com>
 Depends: python
@@ -14,8 +14,8 @@ Architecture: all
 Copyright: LICENSE
 # Changelog: <changelog file; defaults to a generic changelog>
 Readme: README.md
-Files: someproject.conf /etc/someproject
- someproject.py /usr/bin
+Files: gallerymaker.conf /etc/gallerymaker
+ gallerymaker.py /usr/bin
 
 Description: Basic html generator for a dir full of m4v video files.
  Basic generator for static pages

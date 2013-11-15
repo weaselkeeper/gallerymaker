@@ -18,7 +18,6 @@ ifeq ($(RELEASE),$(VERSION))
 	RELEASE=0
 endif
 
-=======
 #Command utilities
 SHELL := /bin/bash
 TAR := /bin/tar
