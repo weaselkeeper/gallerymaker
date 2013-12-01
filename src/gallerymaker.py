@@ -56,6 +56,9 @@ def gallery_subdir(_dir):
         if _file.endswith('.m4v'):
             hasvids = 1
     if hasvids:
+        if args.debug:
+            for name in os.listdir(_dir):
+                log.debug('found %s in %s ' % (name, _dir))
         return [name for name in os.listdir(_dir)
             if os.path.isdir(os.path.join(_dir, name))]
     else:
