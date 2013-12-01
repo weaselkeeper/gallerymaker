@@ -43,10 +43,12 @@ def run():
             log.debug(' in run(), dealing with variables %s %s %s %s' %
                     (filedir, subdir, vids, _dir))
             create_index(vids, filedir, _dir)
+    log.debug('leaving run()')
 
 def gallery_subdir(_dir):
     """ If there are subdirs, check for m4v files, if so, return list of them
     to build gallery with """
+    log.debug('in gallery_subdir()')
     vids = os.listdir(_dir)
     hasvids = 0
     for _file in vids:
@@ -57,21 +59,26 @@ def gallery_subdir(_dir):
         return [name for name in os.listdir(_dir)
             if os.path.isdir(os.path.join(_dir, name))]
     else:
+        log.debug('leaving gallery_subdir()')
         return []
+    log.debug('leaving gallery_subdir(), apparantly, this is not a subdir')
 
 
 def get_videolist(_moviedir):
     """ Build a list of the video files """
+    log.debug('in get_videolist()')
     videolisting = []
     vids = os.listdir(_moviedir)
     for _file in vids:
         if _file.endswith('.m4v'):
             videolisting.append(_file)
+    log.debug('leaving get_videolist()')
     return videolisting
 
 
 def create_movie_html(videofile, _moviedir, sep, docroot_subdir):
     """ make do the html for video thingy"""
+    log.debug('in create_movie_html()')
     header = """
 <!doctype html>
 <html>
@@ -118,10 +125,12 @@ def create_movie_html(videofile, _moviedir, sep, docroot_subdir):
     else:
         movie_page.write(footer)
     movie_page.close()
+    log.debug('leaving create_movie_html()')
 
 
 def create_index(videolist, _moviedir, sep, docroot_subdir=''):
     """ create the index.html, pointing at all the individual ones"""
+    log.debug('entering create_index()')
     template_header = """
 <!doctype html>
 <html>
@@ -160,6 +169,7 @@ def create_index(videolist, _moviedir, sep, docroot_subdir=''):
     else:
         index.write(template_footer)
     index.close()
+    log.debug('leaving create_index()')
 
 if "__main__" in __name__:
 
