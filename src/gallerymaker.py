@@ -38,10 +38,9 @@ def run():
         # find any subdirs that contain movie files
         for _dir in gallery_subdir(moviedir):
             filedir = os.path.join(moviedir, _dir)
-            subdir = os.path.join(moviedir, _dir)
-            vids = get_videolist(subdir)
-            log.debug(' in run(), dealing with variables %s %s %s %s' %
-                    (filedir, subdir, vids, _dir))
+            vids = get_videolist(filedir)
+            log.debug(' in run(), dealing with variables %s %s %s' %
+                    (filedir, vids, _dir))
             create_index(vids, filedir, _dir)
     log.debug('leaving run()')
 
@@ -132,7 +131,7 @@ def create_movie_html(videofile, _moviedir, sep, docroot_subdir):
     log.debug('leaving create_movie_html()')
 
 
-def create_index(videolist, _moviedir, sep, docroot_subdir=''):
+def create_index(videolist, _moviedir, docroot_subdir=''):
     """ create the index.html, pointing at all the individual ones"""
     log.debug('entering create_index()')
     template_header = """
@@ -149,13 +148,14 @@ def create_index(videolist, _moviedir, sep, docroot_subdir=''):
 </html>
 """
     indexfile = os.path.join(_moviedir, 'index.html')
-    index = open(indexfile, 'w')
     if args.dryrun:
         log.debug('writing header %s' % template_header)
     else:
+        index = open(indexfile, 'w')
         index.write(template_header)
     if args.recurse:
         for _dir in gallery_subdir(_moviedir):
+            log.debug('found subdir %s containing one or more movie files' % _dir)
             tag = '<a href=' + _dir + '/index.html>' + _dir + '</a></br>'
             if args.dryrun:
                 log.debug('writing tag %s' % tag)
@@ -167,7 +167,7 @@ def create_index(videolist, _moviedir, sep, docroot_subdir=''):
             log.debug('writing tag %s' % tag)
         else:
             index.write(tag)
-        create_movie_html(video, _moviedir, sep, docroot_subdir)
+        create_movie_html(video, _moviedir, '/', docroot_subdir)
     if args.dryrun:
         log.debug('writing footer %s' % template_footer)
     else:
