@@ -52,9 +52,10 @@ def gallery_subdir(_dir):
     vids = os.listdir(_dir)
     hasvids = 0
     for _file in vids:
-        # This isn't very efficient at all.  Should stop if one file is correct.
+        # Stop if one file is correct.
         if _file.endswith('.m4v'):
             hasvids = 1
+            break
     if hasvids:
         if args.debug:
             for name in os.listdir(_dir):
