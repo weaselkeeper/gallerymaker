@@ -177,7 +177,7 @@ def create_index(videolist, _moviedir, docroot_subdir=''):
 
 if "__main__" in __name__:
 
-    """ command-line options """
+    """ some command-line options """
     parser = argparse.ArgumentParser(description='Pass cli options')
     parser.add_argument('-c', '--config', action = "store",
         help='Specify a path to an alternate config file')
@@ -197,7 +197,6 @@ if "__main__" in __name__:
     else:
         moviedir = './'
 
-    """ And go """
     log.debug('off to run()')
     run()
 
