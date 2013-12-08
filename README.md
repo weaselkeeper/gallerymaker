@@ -13,3 +13,9 @@ optional arguments:
   -r, --recurse
   -D, --debug
 
+
+
+
+Yeah, I know, the code sucks, it's way more complicated and fragile than it should be
+But it works for my limited needs, and I lack the desire to rewrite it to be less sucky
+at this time.
