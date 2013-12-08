@@ -33,7 +33,7 @@ def run():
     # we assume moviedir is docroot.
     log.debug('Creating top level index with %s, %s ' %
             (vids, moviedir))
-    create_index(vids, moviedir, '/page/')
+    create_index(vids, moviedir)
     if args.recurse:
         # find any subdirs that contain movie files
         for _dir in gallery_subdir(moviedir):
@@ -41,7 +41,7 @@ def run():
             vids = get_videolist(filedir)
             log.debug(' in run(), dealing with variables %s %s %s' %
                     (filedir, vids, _dir))
-            create_index(vids, filedir, _dir)
+            create_index(vids, filedir)
     log.debug('leaving run()')
 
 def gallery_subdir(_dir):
@@ -79,7 +79,7 @@ def get_videolist(_moviedir):
     return videolisting
 
 
-def create_movie_html(videofile, _moviedir, sep, docroot_subdir):
+def create_movie_html(videofile, _moviedir):
     """ make do the html for video thingy"""
     log.debug('in create_movie_html()')
     header = """
@@ -103,7 +103,7 @@ def create_movie_html(videofile, _moviedir, sep, docroot_subdir):
     # Then write the file to that subdir.  We put the html files in a subdir
     # to avoid clotting up the movie dir.
 
-    movie_index_page = moviedir + sep + videofile.split('.')[0] + ".html"
+    movie_index_page = moviedir + videofile.split('.')[0] + ".html"
     subdir = os.path.dirname(movie_index_page)
     log.debug('tracking some movies %s %s %s' % (movie_index_page, videofile,
               subdir))
@@ -115,7 +115,7 @@ def create_movie_html(videofile, _moviedir, sep, docroot_subdir):
     else:
         movie_page.write(header)
 
-    moviefile_loc = os.path.join(docroot_subdir, videofile)
+    moviefile_loc = videofile
     if args.dryrun:
         log.debug('writing moviepage %s' % moviefile_loc)
     else:
@@ -131,7 +131,7 @@ def create_movie_html(videofile, _moviedir, sep, docroot_subdir):
     log.debug('leaving create_movie_html()')
 
 
-def create_index(videolist, _moviedir, docroot_subdir=''):
+def create_index(videolist, _moviedir):
     """ create the index.html, pointing at all the individual ones"""
     log.debug('entering create_index()')
     template_header = """
@@ -162,12 +162,12 @@ def create_index(videolist, _moviedir, docroot_subdir=''):
             else:
                 index.write(tag)
     for video in videolist:
-        tag = '<a href="page/' + video.split('.')[0] + '.html">' + video + '</a></br>'
+        tag = '<a href="' + video.split('.')[0] + '.html">' + video + '</a></br>'
         if args.dryrun:
             log.debug('writing tag %s' % tag)
         else:
             index.write(tag)
-        create_movie_html(video, _moviedir, '/', docroot_subdir)
+        create_movie_html(video, _moviedir)
     if args.dryrun:
         log.debug('writing footer %s' % template_footer)
     else:
