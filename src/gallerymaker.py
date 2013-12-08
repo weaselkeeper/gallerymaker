@@ -99,16 +99,10 @@ def create_movie_html(videofile, _moviedir):
 </html>
 """
 
-    # Create the subdir for the movie html pages if it doesn't exist
-    # Then write the file to that subdir.  We put the html files in a subdir
-    # to avoid clotting up the movie dir.
+    # Write the index file for a movie to the topdir
 
     movie_index_page = moviedir + videofile.split('.')[0] + ".html"
-    subdir = os.path.dirname(movie_index_page)
-    log.debug('tracking some movies %s %s %s' % (movie_index_page, videofile,
-              subdir))
-    if not os.path.exists(subdir):
-        os.mkdir(subdir)
+    log.debug('tracking some movies %s %s ' % (movie_index_page, videofile,))
     movie_page = open(movie_index_page, 'w')
     if args.dryrun:
         log.debug('writing header %s' % header)
