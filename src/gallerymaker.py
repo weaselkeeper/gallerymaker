@@ -41,7 +41,7 @@ def run():
             vids = get_videolist(filedir)
             log.debug(' in run(), dealing with variables %s %s %s' %
                     (filedir, vids, _dir))
-            create_index(vids, filedir)
+            create_index(vids, filedir, _dir)
     log.debug('leaving run()')
 
 def gallery_subdir(_dir):
@@ -79,7 +79,7 @@ def get_videolist(_moviedir):
     return videolisting
 
 
-def create_movie_html(videofile, _moviedir):
+def create_movie_html(videofile, _moviedir, subdir=''):
     """ make do the html for video thingy"""
     log.debug('in create_movie_html()')
     header = """
@@ -109,7 +109,7 @@ def create_movie_html(videofile, _moviedir):
     else:
         movie_page.write(header)
 
-    moviefile_loc = videofile
+    moviefile_loc = os.path.join(subdir,videofile)
     if args.dryrun:
         log.debug('writing moviepage %s' % moviefile_loc)
     else:
@@ -125,14 +125,14 @@ def create_movie_html(videofile, _moviedir):
     log.debug('leaving create_movie_html()')
 
 
-def create_index(videolist, _moviedir):
+def create_index(videolist, _moviedir, subdir = '' ):
     """ create the index.html, pointing at all the individual ones"""
     log.debug('entering create_index()')
     template_header = """
 <!doctype html>
 <html>
         <head>
-            <title>Movietime!</title>
+            <title>Movietime Index!</title>
                 <meta charset="utf-8">
         </head>
     <body>
@@ -156,12 +156,12 @@ def create_index(videolist, _moviedir):
             else:
                 index.write(tag)
     for video in videolist:
-        tag = '<a href="' + video.split('.')[0] + '.html">' + video + '</a></br>'
+        tag = '<a href="' + video.split('.')[0] + '.html">' + subdir +  video + '</a></br>'
         if args.dryrun:
             log.debug('writing tag %s' % tag)
         else:
             index.write(tag)
-        create_movie_html(video, _moviedir)
+        create_movie_html(video, _moviedir, subdir)
     if args.dryrun:
         log.debug('writing footer %s' % template_footer)
     else:
