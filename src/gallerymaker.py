@@ -156,11 +156,13 @@ def create_index(videolist, _moviedir, subdir = '' ):
             else:
                 index.write(tag)
     for video in videolist:
-        tag = '<a href="' + video.split('.')[0] + '.html">' + subdir +  video + '</a></br>'
+        videoname = video.split('.')[0]
+        tag = '<a href="/' + videoname + '.html">' +  videoname + '</a></br>'
         if args.dryrun:
             log.debug('writing tag %s' % tag)
         else:
             index.write(tag)
+            index.write('\n')
         create_movie_html(video, _moviedir, subdir)
     if args.dryrun:
         log.debug('writing footer %s' % template_footer)
