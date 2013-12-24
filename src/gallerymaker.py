@@ -109,7 +109,7 @@ def create_movie_html(videofile, _moviedir, subdir=''):
     else:
         movie_page.write(header)
 
-    moviefile_loc = os.path.join(subdir,videofile)
+    moviefile_loc = os.path.join(subdir, videofile)
     if args.dryrun:
         log.debug('writing moviepage %s' % moviefile_loc)
     else:
@@ -149,7 +149,7 @@ def create_index(videolist, _moviedir, subdir = '' ):
         index.write(template_header)
     if args.recurse:
         for _dir in gallery_subdir(_moviedir):
-            log.debug('found subdir %s containing one or more movie files' % _dir)
+            log.debug('found subdir %s containing 1+ movie files' % _dir)
             tag = '<a href=' + _dir + '/index.html>' + _dir + '</a></br>'
             if args.dryrun:
                 log.debug('writing tag %s' % tag)
@@ -173,7 +173,7 @@ def create_index(videolist, _moviedir, subdir = '' ):
 
 if "__main__" in __name__:
 
-    """ some command-line options """
+    # some command-line options
     parser = argparse.ArgumentParser(description='Pass cli options')
     parser.add_argument('-c', '--config', action = "store",
         help='Specify a path to an alternate config file')
