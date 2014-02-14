@@ -78,7 +78,7 @@ def get_videolist(_moviedir):
     return videolisting
 
 
-def create_movie_html(videofile, _moviedir, subdir=''):
+def create_movie_html(videofile, subdir=''):
     """ make do the html for video thingy"""
     log.debug('in create_movie_html()')
     header = """
@@ -162,7 +162,7 @@ def create_index(videolist, _moviedir, subdir=''):
         else:
             index.write(tag)
             index.write('\n')
-        create_movie_html(video, _moviedir, subdir)
+        create_movie_html(video, subdir)
     if args.dryrun:
         log.debug('writing footer %s', template_footer)
     else:
