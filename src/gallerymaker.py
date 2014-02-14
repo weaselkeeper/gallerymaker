@@ -100,7 +100,7 @@ def create_movie_html(videofile, subdir=''):
 
     # Write the index file for a movie to the topdir
 
-    movie_index_page = moviedir + videofile.split('.')[0] + ".html"
+    movie_index_page = moviedir + '/' + videofile.split('.')[0] + ".html"
     log.debug('tracking some movies %s %s ', movie_index_page, videofile)
     movie_page = open(movie_index_page, 'w')
     if args.dryrun:
