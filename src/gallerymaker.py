@@ -193,5 +193,5 @@ if "__main__" in __name__:
         moviedir = './'
 
     log.debug('off to run()')
-    run()
+    sys.exit(run())
 
