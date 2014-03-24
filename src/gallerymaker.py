@@ -30,6 +30,9 @@ log = logging.getLogger(PROJECTNAME)
 def run():
     """ Set up defaults, init stuff, do the needful, the usual"""
     log.debug('In run function')
+    if args.cleanup:
+        #First we cleanup, if asked to
+        cleanup(moviedir)
     vids = get_videolist(moviedir)
     # we assume moviedir is docroot.
     log.debug('Creating top level index with %s, %s ', vids, moviedir)
@@ -78,6 +81,12 @@ def get_videolist(_moviedir):
             videolisting.append(_file)
     log.debug('leaving get_videolist()')
     return videolisting
+
+
+def cleanup(_moviedir):
+    """ Remove all html files from _moviedir, for cleanup """
+
+    return
 
 
 def create_movie_html(videofile, subdir=''):
@@ -184,6 +193,7 @@ if "__main__" in __name__:
     parser.add_argument('-r', '--recurse', action="store_true")
     parser.add_argument('-D', '--debug', action='store_true')
     parser.add_argument('-n', '--dryrun', action='store_true')
+    parser.add_argument('-x', '--cleanup', action='store_true')
     args = parser.parse_args()
     args.usage = 'gallerymaker [options]'
 
