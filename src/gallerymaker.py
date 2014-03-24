@@ -26,6 +26,7 @@ console.setLevel(logging.WARN)
 logging.getLogger(PROJECTNAME).addHandler(console)
 log = logging.getLogger(PROJECTNAME)
 
+
 def run():
     """ Set up defaults, init stuff, do the needful, the usual"""
     log.debug('In run function')
@@ -39,9 +40,10 @@ def run():
             filedir = os.path.join(moviedir, _dir)
             vids = get_videolist(filedir)
             log.debug(' in run(), dealing with variables %s %s %s',
-                    filedir, vids, _dir)
+                      filedir, vids, _dir)
             create_index(vids, filedir, _dir)
     log.debug('leaving run()')
+
 
 def gallery_subdir(_dir):
     """ If there are subdirs, check for m4v files, if so, return list of them
@@ -156,7 +158,7 @@ def create_index(videolist, _moviedir, subdir=''):
                 index.write(tag)
     for video in videolist:
         videoname = video.split('.')[0]
-        tag = '<a href="/' + videoname + '.html">' +  videoname + '</a></br>'
+        tag = '<a href="/' + videoname + '.html">' + videoname + '</a></br>'
         if args.dryrun:
             log.debug('writing tag %s', tag)
         else:
@@ -167,7 +169,9 @@ def create_index(videolist, _moviedir, subdir=''):
         log.debug('writing footer %s', template_footer)
     else:
         index.write(template_footer)
-    index.close()
+    if not args.dryrun:
+        # If in dryrun, didn't open it, so can't close it
+        index.close()
     log.debug('leaving create_index()')
 
 if "__main__" in __name__:
@@ -175,7 +179,7 @@ if "__main__" in __name__:
     # some command-line options
     parser = argparse.ArgumentParser(description='Pass cli options')
     parser.add_argument('-c', '--config', action="store",
-        help='Specify a path to an alternate config file')
+                        help='Specify a path to an alternate config file')
     parser.add_argument('-d', '--dir', action="store")
     parser.add_argument('-r', '--recurse', action="store_true")
     parser.add_argument('-D', '--debug', action='store_true')
@@ -194,4 +198,3 @@ if "__main__" in __name__:
 
     log.debug('off to run()')
     sys.exit(run())
-
