@@ -89,7 +89,7 @@ def cleanup(_moviedir):
         for root, dirs, files in os.walk(_moviedir):
             for _file in files:
                 if _file.endswith(".html"):
-                    markedfile = os.path.join(root, file)
+                    markedfile = os.path.join(root, _file)
                     os.remove(markedfile)
     return
 
