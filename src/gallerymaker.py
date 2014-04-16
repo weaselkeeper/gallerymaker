@@ -64,7 +64,7 @@ def gallery_subdir(_dir):
             for name in os.listdir(_dir):
                 log.debug('found %s in %s ', name, _dir)
         return [name for name in os.listdir(_dir)
-            if os.path.isdir(os.path.join(_dir, name))]
+                if os.path.isdir(os.path.join(_dir, name))]
     else:
         log.debug('leaving gallery_subdir()')
         return []
@@ -87,8 +87,8 @@ def cleanup(_moviedir):
     """ Remove all html files from _moviedir, for cleanup """
     if not args.dryrun:
         for root, dirs, files in os.walk(_moviedir):
-            for file in files:
-                if file.endswith(".html"):
+            for _file in files:
+                if _file.endswith(".html"):
                     markedfile = os.path.join(root, file)
                     os.remove(markedfile)
     return
