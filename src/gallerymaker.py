@@ -86,10 +86,10 @@ def get_videolist(_moviedir):
 def cleanup(_moviedir):
     """ Remove all html files from _moviedir, for cleanup """
     if not args.dryrun:
-        for root, dirs, files in os.walk(_moviedir):
-            for _file in files:
+        for obj in os.walk(_moviedir):
+            for _file in obj[2]:
                 if _file.endswith(".html"):
-                    markedfile = os.path.join(root, _file)
+                    markedfile = os.path.join(obj[0], _file)
                     os.remove(markedfile)
     return
 
