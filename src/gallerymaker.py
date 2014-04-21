@@ -37,7 +37,7 @@ def run():
     # we assume moviedir is docroot.
     log.debug('Creating top level index with %s, %s ', vids, moviedir)
     create_index(vids, moviedir)
-    if args.recurse:
+    if not args.norecurse:
         # find any subdirs that contain movie files
         for _dir in gallery_subdir(moviedir):
             filedir = os.path.join(moviedir, _dir)
@@ -162,7 +162,7 @@ def create_index(videolist, _moviedir, subdir=''):
     else:
         index = open(indexfile, 'w')
         index.write(template_header)
-    if args.recurse:
+    if not args.norecurse:
         for _dir in gallery_subdir(_moviedir):
             log.debug('found subdir %s containing 1+ movie files', _dir)
             tag = '<a href=' + _dir + '/index.html>' + _dir + '</a></br>'
@@ -195,7 +195,7 @@ if "__main__" in __name__:
     parser.add_argument('-c', '--config', action="store",
                         help='Specify a path to an alternate config file')
     parser.add_argument('-d', '--dir', action="store")
-    parser.add_argument('-r', '--recurse', action="store_true")
+    parser.add_argument('-N', '--norecurse', action="store_true")
     parser.add_argument('-D', '--debug', action='store_true')
     parser.add_argument('-n', '--dryrun', action='store_true')
     parser.add_argument('-x', '--cleanup', action='store_true')
