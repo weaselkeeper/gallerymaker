@@ -18,4 +18,4 @@ optional arguments:
 
 Yeah, I know, the code sucks, it's way more complicated and fragile than it should be
 But it works for my limited needs, and I lack the desire to rewrite it to be less sucky
-at this time.
+at this time, and since I discovered plex ( https://plex.tv/ ) which does this, and so much more, ain't likely to put any more time into it.  Leaving it here in case someone finds it useful
